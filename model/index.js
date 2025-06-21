@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../config/db.config.js');
+const auther = require('./auther');
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
   dialect: config.dialect,
@@ -19,4 +20,4 @@ Publisher.hasMany(Book, { foreignKey: 'pubId', as: 'books' });
 Book.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
 User.hasMany(Book, { foreignKey: 'createdBy', as: 'createdBooks' });
 
-module.exports = { sequelize, Sequelize, User, Author, Publisher, Book };
+module.exports = { sequelize, Sequelize, User, Author, Publisher, Book,};

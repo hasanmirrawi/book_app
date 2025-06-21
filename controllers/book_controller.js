@@ -55,19 +55,24 @@ exports.getAllBooks = async (req, res) => {
   }
 };
 
-exports.getBookByTitle = async (req, res) => {
+exports.searchBooksByTitle = async (req, res) => {
   try {
     const { title } = req.params;
+
+    // Only match titles that start with the given query
     const books = await Book.findAll({
       where: {
         title: {
-          [db.Sequelize.Op.like]: `%${title}%`,
-        },
+          [Op.startsWith]: title
+        }
       },
-      include: [Publisher, Author],
+      order: [['title', 'ASC']],
+      // include: [{ model: Author }, { model: Publisher }], // if you want associations
     });
-    res.status(200).send(books);
+
+    return res.status(200).json(books);
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    console.error('Error in searchBooksByTitle:', error);
+    return res.status(500).json({ message: error.message });
   }
 };
